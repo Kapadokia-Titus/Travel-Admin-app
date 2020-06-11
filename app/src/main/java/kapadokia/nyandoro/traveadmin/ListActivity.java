@@ -43,7 +43,6 @@ public class ListActivity extends AppCompatActivity {
 
                    TravelDeal td = dataSnapshot.getValue(TravelDeal.class);
                    textView.setText(textView.getText()+ "\n" +td.getTitle());
-                   databaseReference.addChildEventListener(childEventListener);
 
             }
 
@@ -67,7 +66,7 @@ public class ListActivity extends AppCompatActivity {
 
             }
         };
-
+        databaseReference.addChildEventListener(childEventListener);
 
     }
 }
