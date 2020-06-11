@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -95,15 +96,22 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
 
     public class DealViewHolder extends RecyclerView.ViewHolder{
 
-         TextView tvTitle;
+         TextView tvTitle,tvPrice, tvDescription;
+         ImageView imvDeal;
         public DealViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            tvTitle = itemView.findViewById(R.id.tvTitle);
+//            imvDeal = itemView.findViewById(R.id.imageDeal);
+            tvTitle = itemView.findViewById(R.id.tv_title);
+            tvPrice = itemView.findViewById(R.id.tv_price);
+            tvDescription = itemView.findViewById(R.id.tv_description);
+
         }
 
         public void bind(TravelDeal travelDeal){
             tvTitle.setText(travelDeal.getTitle());
+            tvPrice.setText(travelDeal.getPrice());
+            tvDescription.setText(travelDeal.getDescription());
         }
     }
 }

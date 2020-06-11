@@ -14,7 +14,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import kapadokia.nyandoro.traveadmin.utility.FirebaseUtils;
 
-public class MainActivity extends AppCompatActivity {
+public class DealActivity extends AppCompatActivity {
 
     //firebase declarations
     private FirebaseDatabase mFirebaseDatabase;
