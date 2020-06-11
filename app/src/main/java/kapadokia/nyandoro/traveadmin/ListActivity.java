@@ -15,6 +15,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
+import kapadokia.nyandoro.traveadmin.utility.FirebaseUtils;
+
 public class ListActivity extends AppCompatActivity {
 
     private ArrayList<TravelDeal> deals;
@@ -33,9 +35,12 @@ public class ListActivity extends AppCompatActivity {
 
         textView = findViewById(R.id.tvDeals);
 
+
+        FirebaseUtils.openFbRefference("traveldeals");
+
         //firebase inits
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference().child("traveldeals");
+        firebaseDatabase = FirebaseUtils.mFirebaseDatabase;
+        databaseReference = FirebaseUtils.mDatabaseRefference;
         childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {

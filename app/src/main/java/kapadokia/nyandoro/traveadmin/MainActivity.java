@@ -12,6 +12,8 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import kapadokia.nyandoro.traveadmin.utility.FirebaseUtils;
+
 public class MainActivity extends AppCompatActivity {
 
     //firebase declarations
@@ -32,9 +34,12 @@ public class MainActivity extends AppCompatActivity {
         txtPrice = findViewById(R.id.txtPrie);
         txtDescription = findViewById(R.id.txtDescription);
 
+
+        FirebaseUtils.openFbRefference("traveldeals");
+
         //firebase inits
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabaseRefference = mFirebaseDatabase.getReference().child("traveldeals");
+        mFirebaseDatabase = FirebaseUtils.mFirebaseDatabase;
+        mDatabaseRefference = FirebaseUtils.mDatabaseRefference;
     }
 
     @Override
