@@ -25,10 +25,10 @@ public class FirebaseUtils {
             firebaseUtils = new FirebaseUtils();
             mFirebaseDatabase = FirebaseDatabase.getInstance();
 
-            travelDeals = new ArrayList<>();
+
         }
 
-
+        travelDeals = new ArrayList<>();
         mDatabaseRefference = mFirebaseDatabase.getReference().child(ref);
 
     }

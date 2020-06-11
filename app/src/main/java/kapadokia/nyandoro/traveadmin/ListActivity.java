@@ -14,8 +14,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import kapadokia.nyandoro.traveadmin.adapter.DealAdapter;
-import kapadokia.nyandoro.traveadmin.utility.FirebaseUtils;
-
 public class ListActivity extends AppCompatActivity {
 
     private ArrayList<TravelDeal> deals;
