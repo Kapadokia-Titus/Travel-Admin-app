@@ -31,17 +31,20 @@ public class ListActivity extends AppCompatActivity {
         //inits
         deals = new ArrayList<>();
 
-        textView = findViewById(R.id.tv_deals);
+        textView = findViewById(R.id.tvDeals);
 
-
+        //firebase inits
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference().child("traveldeals");
         childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                TravelDeal td = dataSnapshot.getValue(TravelDeal.class);
-                textView.setText(td.getTitle()+" \n"+td.getDescription()+"\n"+td.getPrice());
-                databaseReference.addChildEventListener(childEventListener);
+
+
+                   TravelDeal td = dataSnapshot.getValue(TravelDeal.class);
+                   textView.setText(textView.getText()+ "\n" +td.getTitle());
+                   databaseReference.addChildEventListener(childEventListener);
+
             }
 
             @Override
@@ -64,5 +67,7 @@ public class ListActivity extends AppCompatActivity {
 
             }
         };
+
+
     }
 }
