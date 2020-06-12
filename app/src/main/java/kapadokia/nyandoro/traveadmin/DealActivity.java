@@ -47,7 +47,7 @@ public class DealActivity extends AppCompatActivity {
         txtDescription.setText(deal.getDescription());
 
 
-        FirebaseUtils.openFbRefference("traveldeals");
+        FirebaseUtils.openFbRefference("traveldeals", this);
 
         //firebase inits
         mFirebaseDatabase = FirebaseUtils.mFirebaseDatabase;

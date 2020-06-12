@@ -14,6 +14,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import kapadokia.nyandoro.traveadmin.adapter.DealAdapter;
+import kapadokia.nyandoro.traveadmin.utility.FirebaseUtils;
+
 public class ListActivity extends AppCompatActivity {
 
     private ArrayList<TravelDeal> deals;
@@ -23,6 +25,9 @@ public class ListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+
+
+        FirebaseUtils.openFbRefference("traveldeals",this);
 
         //inits
         deals = new ArrayList<>();
@@ -53,5 +58,19 @@ public class ListActivity extends AppCompatActivity {
                 startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
 }
