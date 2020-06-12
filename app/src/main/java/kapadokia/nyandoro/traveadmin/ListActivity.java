@@ -35,6 +35,7 @@ public class ListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
+<<<<<<< HEAD
         FirebaseUtils.openFbRefference("traveldeals");
         firebaseDatabase = FirebaseUtils.mFirebaseDatabase;
         databaseReference = FirebaseUtils.mDatabaseRefference;
@@ -66,9 +67,11 @@ public class ListActivity extends AppCompatActivity {
             }
         };
 
+=======
+        FirebaseUtils.openFbRefference("traveldeals", this);
+>>>>>>> cant figure out the bug
         //inits
         deals = new ArrayList<>();
-
         recyclerView = findViewById(R.id.deals_recycler);
         final DealAdapter dealAdapter = new DealAdapter();
         recyclerView.setAdapter(dealAdapter);
@@ -101,13 +104,21 @@ public class ListActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+<<<<<<< HEAD
 
 
+=======
+        FirebaseUtils.detachListener();
+>>>>>>> cant figure out the bug
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+<<<<<<< HEAD
 
+=======
+        FirebaseUtils.attachListener();;
+>>>>>>> cant figure out the bug
     }
 }
