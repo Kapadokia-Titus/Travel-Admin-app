@@ -34,11 +34,6 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
 
     public DealAdapter(){
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> cant figure out the bug
         //firebase inits
         firebaseDatabase = FirebaseUtils.mFirebaseDatabase;
         databaseReference = FirebaseUtils.mDatabaseRefference;

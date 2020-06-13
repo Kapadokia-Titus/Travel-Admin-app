@@ -12,6 +12,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,8 +38,7 @@ public class ListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-<<<<<<< HEAD
-        FirebaseUtils.openFbRefference("traveldeals");
+        FirebaseUtils.openFbRefference( this);
         firebaseDatabase = FirebaseUtils.mFirebaseDatabase;
         databaseReference = FirebaseUtils.mDatabaseRefference;
 
@@ -67,9 +69,9 @@ public class ListActivity extends AppCompatActivity {
             }
         };
 
-=======
-        FirebaseUtils.openFbRefference("traveldeals", this);
->>>>>>> cant figure out the bug
+
+
+
         //inits
         deals = new ArrayList<>();
         recyclerView = findViewById(R.id.deals_recycler);
@@ -96,6 +98,19 @@ public class ListActivity extends AppCompatActivity {
             case R.id.insert_menu:
                 Intent intent = new Intent(this, DealActivity.class);
                 startActivity(intent);
+                return true;
+
+            case R.id.logout_menu:
+                AuthUI.getInstance()
+                        .signOut(this)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            public void onComplete(@NonNull Task<Void> task) {
+                                // ...
+                            }
+                        });
+
+                FirebaseUtils.detachListener();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -104,21 +119,15 @@ public class ListActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-<<<<<<< HEAD
 
-
-=======
         FirebaseUtils.detachListener();
->>>>>>> cant figure out the bug
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-<<<<<<< HEAD
-
-=======
         FirebaseUtils.attachListener();;
->>>>>>> cant figure out the bug
+
     }
 }
