@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,14 +34,26 @@ public class ListActivity extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
     private ChildEventListener childEventListener;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseAuth.AuthStateListener authStateListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        FirebaseUtils.openFbRefference( this);
+        FirebaseUtils.openFbRefference( "traveldeals");
         firebaseDatabase = FirebaseUtils.mFirebaseDatabase;
         databaseReference = FirebaseUtils.mDatabaseRefference;
+
+//        firebaseAuth = FirebaseAuth.getInstance();
+//
+//        authStateListener = new FirebaseAuth.AuthStateListener() {
+//            @Override
+//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+//
+//            }
+//        };
+
 
         childEventListener = new ChildEventListener() {
             @Override
@@ -109,7 +122,6 @@ public class ListActivity extends AppCompatActivity {
                             }
                         });
 
-                FirebaseUtils.detachListener();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -120,14 +132,14 @@ public class ListActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
-        FirebaseUtils.detachListener();
+
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        FirebaseUtils.attachListener();;
+
 
     }
 }
