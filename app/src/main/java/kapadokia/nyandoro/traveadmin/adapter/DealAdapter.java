@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,41 +41,55 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
         databaseReference = FirebaseUtils.mDatabaseRefference;
         deals = FirebaseUtils.travelDeals;
 
-        childEventListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        if (childEventListener !=null){
+
+            childEventListener = new ChildEventListener() {
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                    if(user != null){
+                        TravelDeal td = dataSnapshot.getValue(TravelDeal.class);
+                        Log.d("deal", td.getTitle());
+                        td.setId(dataSnapshot.getKey());
+                        deals.add(td);
+                        notifyItemInserted(deals.size()-1);
+                    }else {
+                        return;
+                    }
 
 
-                TravelDeal td = dataSnapshot.getValue(TravelDeal.class);
-                Log.d("deal", td.getTitle());
-                td.setId(dataSnapshot.getKey());
-                deals.add(td);
-                notifyItemInserted(deals.size()-1);
 
-            }
+                }
 
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                @Override
+                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-            }
+                }
 
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
-            }
+                }
 
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-            }
+                }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        };
+                }
+            };
 
-        databaseReference.addChildEventListener(childEventListener);
+            databaseReference.addChildEventListener(childEventListener);
+
+        }else {
+            return;
+        }
+
     }
     @NonNull
     @Override
@@ -91,7 +107,10 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
 
     @Override
     public int getItemCount() {
-        return deals.size();
+        if (deals !=null){
+            return deals.size();
+        }
+        return 0;
     }
 
     public class DealViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
