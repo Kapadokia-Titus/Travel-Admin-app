@@ -1,7 +1,6 @@
 package kapadokia.nyandoro.traveadmin;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,16 +12,12 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.auth.FirebaseUser;
+
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import kapadokia.nyandoro.traveadmin.adapter.DealAdapter;
 import kapadokia.nyandoro.traveadmin.utility.FirebaseUtils;
@@ -31,70 +26,55 @@ public class ListActivity extends AppCompatActivity {
 
     private ArrayList<TravelDeal> deals;
     private RecyclerView recyclerView;
-    private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference databaseReference;
-    private ChildEventListener childEventListener;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
+    private  static final int RC_SIGN_IN = 123;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        FirebaseUtils.openFbRefference( "traveldeals");
-        firebaseDatabase = FirebaseUtils.mFirebaseDatabase;
-        databaseReference = FirebaseUtils.mDatabaseRefference;
+        //inits
+        deals = new ArrayList<>();
+        firebaseAuth = FirebaseAuth.getInstance();
 
-//        firebaseAuth = FirebaseAuth.getInstance();
+        recyclerView = findViewById(R.id.deals_recycler);
+//        DealAdapter dealAdapter = new DealAdapter();
+//        recyclerView.setAdapter(dealAdapter);
 //
-//        authStateListener = new FirebaseAuth.AuthStateListener() {
-//            @Override
-//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+//        LinearLayoutManager  manager = new LinearLayoutManager(this);
+//        manager.setOrientation(RecyclerView.VERTICAL);
 //
-//            }
-//        };
+//        recyclerView.setLayoutManager(manager);
 
 
-        childEventListener = new ChildEventListener() {
+        authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                //getting the current user
+                FirebaseUser user = firebaseAuth.getCurrentUser();
 
-            }
+                if(user !=null){
+                    // user signed in
+                    Toast.makeText(ListActivity.this, "you have successfully signed in", Toast.LENGTH_SHORT).show();
 
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                }else{
+                    //user signed out
+                    startActivityForResult(
+                            AuthUI.getInstance()
+                                    .createSignInIntentBuilder()
+                                    .setIsSmartLockEnabled(false)
+                                    .setAvailableProviders(Arrays.asList(
+                                            new AuthUI.IdpConfig.GoogleBuilder().build(),
+                                            new AuthUI.IdpConfig.EmailBuilder().build(),
+                                            new AuthUI.IdpConfig.PhoneBuilder().build()))
+                                    .build(),
+                            RC_SIGN_IN);
+                }
 
             }
         };
-
-
-
-
-        //inits
-        deals = new ArrayList<>();
-        recyclerView = findViewById(R.id.deals_recycler);
-        final DealAdapter dealAdapter = new DealAdapter();
-        recyclerView.setAdapter(dealAdapter);
-
-        LinearLayoutManager  manager = new LinearLayoutManager(this);
-        manager.setOrientation(RecyclerView.VERTICAL);
-
-        recyclerView.setLayoutManager(manager);
 
     }
 
@@ -111,35 +91,26 @@ public class ListActivity extends AppCompatActivity {
             case R.id.insert_menu:
                 Intent intent = new Intent(this, DealActivity.class);
                 startActivity(intent);
-                return true;
-
-            case R.id.logout_menu:
-                AuthUI.getInstance()
-                        .signOut(this)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            public void onComplete(@NonNull Task<Void> task) {
-                                // ...
-                            }
-                        });
-
-                return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
 
     @Override
-    protected void onPause() {
-        super.onPause();
-
-
-
+    protected void onResume() {
+        super.onResume();
+        firebaseAuth.addAuthStateListener(authStateListener);
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onPause() {
+        super.onPause();
+        firebaseAuth.removeAuthStateListener(authStateListener);
+    }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        firebaseAuth.removeAuthStateListener(authStateListener);
     }
 }
